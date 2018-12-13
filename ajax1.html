@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <button id="button">Click me</button> <br />
+    <div id="text"></div>
+    <script>
+      // create event listener
+      document.getElementById("button").addEventListener("click", loadText);
+
+      function loadText() {
+        // create simple XHR object
+        console.log("button clicked");
+        var xhr = new XMLHttpRequest();
+        // open - type, url/file, asyc
+        console.log(xhr);
+        xhr.open("GET", "sample.txt", true);
+
+        console.log("READYSTATE", xhr.readyState);
+
+        // optional for loaders
+        xhr.onprogress = function() {
+          console.log("READY STATE ON PROGRESS", xhr.readyState);
+        };
+
+        xhr.onload = function() {
+          if (xhr.status == 200) {
+            console.log("READY STATE ON LOAD", this.responseText);
+            document.getElementById("text").innerHTML = this.responseText;
+          } else if ((this.status = 404)) {
+            document.getElementById("text").innerHTML = "Not Found";
+          }
+        };
+
+        xhr.onerror = function() {
+          console.log("READY STATE ON ERROR", xhr.onerror);
+        };
+
+        xhr.onreadystatechange = function() {
+          console.log("READY STATE ON REAFY STATE CHANGE", xhr.readyState);
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+          }
+        };
+
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
+
+<!--
+  0	UNSENT	Client has been created. open() not called yet.
+  1	OPENED	open() has been called.
+  2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
+  3	LOADING	Downloading; responseText holds partial data.
+-->
